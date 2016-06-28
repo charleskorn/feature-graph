@@ -104,5 +104,21 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
         }
       }
     })
+
+    describe("when given two features in a single group with the same name") {
+      it("should throw an exception") {
+        val exception = the [InvalidFeatureGraphException] thrownBy parser.parse("(A,A)")
+
+        exception.message should equal ("The feature 'A' is repeated multiple times.")
+      }
+    }
+
+    describe("when given two features in different groups with the same name") {
+      it("should throw an exception") {
+        val exception = the [InvalidFeatureGraphException] thrownBy parser.parse("(A)(A)")
+
+        exception.message should equal ("The feature 'A' is repeated multiple times.")
+      }
+    }
   }
 }
