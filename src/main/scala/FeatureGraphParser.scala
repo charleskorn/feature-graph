@@ -1,4 +1,3 @@
-import scala.None
 import scala.util.parsing.combinator._
 import scala.util.parsing.input.CharSequenceReader
 
