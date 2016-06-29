@@ -1,1 +1,1 @@
-case class Feature (name: String, groupName: String, dependsOn: Set[Feature])
+case class Feature (name: String, groupName: String)
