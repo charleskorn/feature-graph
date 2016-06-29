@@ -198,7 +198,7 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
       }
     })
 
-    describe(s"when given two features in individual groups with a single dependency between them referencing a feature in a future group") {
+    describe("when given two features in individual groups with a single dependency between them referencing a feature in a future group") {
       it("should return those two features and the dependency") {
         val actual = parser.parse("(A)[A->B] (B)[]")
 
@@ -221,7 +221,7 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
       }
     }
 
-    describe(s"when given two features in individual groups with a single dependency between them referencing a feature in a previous group") {
+    describe("when given two features in individual groups with a single dependency between them referencing a feature in a previous group") {
       it("should return those two features and the dependency") {
         val actual = parser.parse("(B)[]     (A)[A->B]")
 
@@ -244,7 +244,7 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
       }
     }
 
-    describe(s"when a dependency references a source feature that does not exist") {
+    describe("when a dependency references a source feature that does not exist") {
       it("should throw an exception") {
         val exception = the [InvalidFeatureGraphException] thrownBy parser.parse("(A,B)[C->B]")
 
@@ -252,7 +252,7 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
       }
     }
 
-    describe(s"when a dependency references a source feature that is not in that group") {
+    describe("when a dependency references a source feature that is not in that group") {
       it("should throw an exception") {
         val exception = the [InvalidFeatureGraphException] thrownBy parser.parse("(A,B)[C->B](C)[]")
 
@@ -260,7 +260,7 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
       }
     }
 
-    describe(s"when a dependency references a dependent feature that does not exist") {
+    describe("when a dependency references a dependent feature that does not exist") {
       it("should throw an exception") {
         val exception = the [InvalidFeatureGraphException] thrownBy parser.parse("(A,B)[B->C]")
 
