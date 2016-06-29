@@ -267,6 +267,22 @@ class FeatureGraphParserTests extends FunSpec with Matchers {
         exception.message should equal ("The feature 'C' referenced by a dependency in group 1 does not exist.")
       }
     }
+
+    Set(
+      "(A,B)[A->B,B->A]" -> "A->B->A",
+      "(A,B,C)[A->B,B->C,C->A]" -> "A->B->C->A",
+      "(A)[A->B] (B)[B->A]" -> "A->B->A",
+      "(A,C)[A->B,C->A] (B)[B->C]" -> "A->B->C->A",
+      "(A)[A->B] (B)[B->C] (C)[C->A]" -> "A->B->C->A"
+    ).foreach { case (input, circularDependency) =>
+      describe(s"when given a circular dependency in the format '$input'") {
+        it("should throw an exception") {
+          val exception = the [InvalidFeatureGraphException] thrownBy parser.parse(input)
+
+          exception.message should equal (s"There is a circular dependency: $circularDependency")
+        }
+      }
+    }
   }
 
   private def beEmptyDependencyMapFor(features: Set[Feature]) = new BeEmptyDependencyMapForMatcher(features)

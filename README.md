@@ -8,6 +8,7 @@ The June Shokunin challenge.
   * lowercase or uppercase letters A-Z
   * digits 0-9
   * underscores
+* Feature names are case-sensitive
 
 ## Notes
 

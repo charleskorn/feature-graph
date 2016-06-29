@@ -27,6 +27,8 @@ class FeatureGraphParser extends RegexParsers {
 
     val dependencies = createDependencies(namedGroups, features)
 
+    checkForCycles(dependencies)
+
     FeatureGraph(features, dependencies)
   }
 
@@ -64,6 +66,23 @@ class FeatureGraphParser extends RegexParsers {
 
   private def dependencyListToGroupedMap(dependencyList: Iterable[Tuple2[Feature, Feature]]): Map[Feature, Set[Feature]] = {
     dependencyList.groupBy(_._1).mapValues(_.map(_._2).toSet)
+  }
+
+  private def checkForCycles(dependencyMap: Map[Feature, Set[Feature]]): Unit = {
+    dependencyMap.keySet.foreach(feature => checkForCycles(List(feature), dependencyMap))
+  }
+
+  private def checkForCycles(pathSoFar: List[Feature], dependencyMap: Map[Feature, Set[Feature]]): Unit = {
+    if (pathSoFar.size > 1 && pathSoFar.head == pathSoFar.last) {
+      val formattedCycle = pathSoFar.map(f => f.name).mkString("->")
+
+      throw InvalidFeatureGraphException(s"There is a circular dependency: $formattedCycle")
+    }
+
+    val lastFeature = pathSoFar.last
+    val dependencies = dependencyMap(lastFeature)
+
+    dependencies.foreach(dependency => checkForCycles(pathSoFar :+ dependency, dependencyMap))
   }
 
   private case class Dependency(from: String, to: String)
