@@ -43,10 +43,10 @@ function test {
 }
 
 function run {
-  echo "Building..."
+  echoWhiteText "Building..."
   build
 
-  echo "Running..."
+  echoWhiteText "Running..."
   runInDockerContainer ./target/universal/stage/bin/feature-graph "$@"
 }
 
@@ -65,6 +65,13 @@ function runInDockerContainer {
     -w /work \
     1science/sbt:0.13.8-oracle-jre-8 \
     "$@"
+}
+
+function echoWhiteText {
+  RESET=$(tput sgr0)
+  WHITE=$(tput setaf 7)
+
+  echo "${WHITE}${@}${RESET}"
 }
 
 main "$@"
